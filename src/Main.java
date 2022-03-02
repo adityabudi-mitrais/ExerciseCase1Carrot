@@ -16,8 +16,17 @@ public class Main {
         initiateUsers();
         showListUsers();
 
+        System.out.println("-----");
+
         sendPoint(1, 2, 10);
+        sendPoint(1, 2, 100);
+
+        System.out.println("-----");
+
         showTransactionHistories();
+
+        System.out.println("-----");
+
         showListUsers();
     }
 
@@ -27,7 +36,7 @@ public class Main {
     }
 
     public static void showListUsers() {
-        System.out.println("List of users: ");
+        System.out.println("Current users data: ");
         for (User user: users) {
             System.out.println(user.toString());
         }
@@ -35,7 +44,7 @@ public class Main {
 
     public static void sendPoint(int idSender, int idReceiver, int pointGiven) {
         int indexSender = -1, indexReceiver = -1;
-        boolean valid = false;
+        boolean idValid = false;
 
         for (int i = 0; i < users.size(); i++) {
             if(users.get(i).getId() == idSender) {
@@ -45,31 +54,40 @@ public class Main {
                 indexReceiver = i;
             }
             if(indexSender>=0 && indexReceiver>=0) {
-                valid = true;
+                idValid = true;
                 break;
             }
         }
 
-        if(!valid) {
-            System.out.println("Sender and/or receiver id not found");
+        //validate id
+        if(!idValid) {
+            System.out.println("ERROR sendPoint(): Sender and/or receiver id not found");
+            return;
+        }
+
+        //validate points
+        if(users.get(indexSender).getPoint()-pointGiven <0) {
+            System.out.println("ERROR sendPoint(): Insufficient sender point/s from id " + idSender);
             return;
         }
 
         users.get(indexSender).setPoint(users.get(indexSender).getPoint()-pointGiven);
         users.get(indexReceiver).setPoint(users.get(indexReceiver).getPoint()+pointGiven);
 
-        String currentDate = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+
         transactionHistories.add(new TransactionHistory(
-                currentDate,
+                new Date(),
                 users.get(indexSender).getName(),
                 users.get(indexReceiver).getName(),
                 pointGiven
                 )
         );
+
+        System.out.println(pointGiven + " point/s given from " + users.get(indexSender).getName() + " to " + users.get(indexReceiver).getName());
     }
 
     public static void showTransactionHistories() {
-        System.out.println("List of history: ");
+        System.out.println("Transaction history: ");
         for (TransactionHistory history: transactionHistories) {
             System.out.println(history.toString());
         }

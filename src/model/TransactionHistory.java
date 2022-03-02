@@ -1,26 +1,27 @@
 package model;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class TransactionHistory {
 
-    private String date;
+    private Date date;
     private String sender;
     private String receiver;
     private int point;
 
-    public TransactionHistory(String date, String sender, String receiver, int point) {
+    public TransactionHistory(Date date, String sender, String receiver, int point) {
         this.date = date;
         this.sender = sender;
         this.receiver = receiver;
         this.point = point;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -50,8 +51,9 @@ public class TransactionHistory {
 
     @Override
     public String toString() {
-        return "TransactionHistory {" +
-                "date=" + date +
+        String currentDate = new SimpleDateFormat("dd-MM-yyyy").format(date);
+        return "{" +
+                "date=" + currentDate +
                 ", sender='" + sender + '\'' +
                 ", receiver='" + receiver + '\'' +
                 ", point=" + point +
